@@ -14,9 +14,5 @@ Homo = GetHomoMatrix(Xin1,Yin1,Xout1,Yout1);
 
 Output = ApplyHomograph(Xin2,Yin2,Homo);
 
-width = (GetDist(Output(:,2),Output(:,1)) + GetDist(Output(:,4),Output(:,3))) / 2;
-length = (GetDist(Output(:,3),Output(:,2)) + GetDist(Output(:,4),Output(:,1))) / 2;
-
-disp(width);
-disp(length);
+length = GetDist
 toc;
