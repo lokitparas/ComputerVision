@@ -2,25 +2,35 @@
 
 tic;
 
-data_3d_file = '../input/Calib_data/Features3D_dataset1.mat';
-data_2d_file = '../input/Calib_data/Features2D_dataset1.mat';
+data_3d_file = '../input/Calib_data/Features3D_dataset2.mat';
+data_2d_file = '../input/Calib_data/Features2D_dataset2.mat';
 
 load(data_3d_file, 'f3D');
 load(data_2d_file, 'f2D');
 
-% getCalib(f3D(1:3, :), f2D(1:2, :))
+M = getCalib(f3D(1:3, :), f2D(1:2, :));
+disp('M:');
+disp(M);
 
-WC = f3D(1:3, :);
-IC = f2D(1:2, :);
+disp('Validating M');
+findError(f3D, f2D, M);
 
-WC_1 = [WC' ones(size(WC,2),1)];
-zero = zeros(size(WC,2),4);
-x_vec = -IC(1,:)';
-y_vec = -IC(2,:)';
-A = [WC_1 zero bsxfun(@times,x_vec, WC_1) ; zero WC_1 bsxfun(@times, y_vec, WC_1)];
+% Introducing error
+err = max(max(abs(f3D(1:3,:))));
+err = err*0.05;
+f3D_err = f3D(1:3, :);
+f2D_err = f2D(1:2, :);
+f3D_err = f3D_err + err*randn(size(f3D_err));
+f3D_err = [f3D_err; ones(1,size(f3D,2))];
+f2D_err = f2D_err + err*randn(size(f2D_err));
+f2D_err = [f2D_err; ones(1,size(f2D,2))];
 
-[~, ~, V] = svd(A);
-M = reshape(V(:,12), 4,3)';
-f2 = M*f3D;
-f2 = [f2(1,:)./f2(3,:); f2(2,:)./f2(3,:); f2(3,:)./f2(3,:)];
+M_err = getCalib(f3D_err(1:3, :), f2D_err(1:2, :));
+disp('Validating M_err');
+findError(f3D, f2D, M_err);
+
+% P = (f2D_err(:,:)-f2D); P=P(1:3,:); std2(P)
+% P = (f3D_err(:,:)-f3D); P=P(1:3,:); std2(P)
+% P = err*randn(size(f3D_err)); std2(P)
+
 toc;
