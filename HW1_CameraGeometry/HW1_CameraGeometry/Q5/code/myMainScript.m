@@ -2,8 +2,9 @@
 
 tic;
 
-data_3d_file = '../input/Calib_data/Features3D_dataset2.mat';
-data_2d_file = '../input/Calib_data/Features2D_dataset2.mat';
+folder = uigetdir();
+data_3d_file = strcat(folder, '/Features3D_dataset1.mat');
+data_2d_file = strcat(folder, '/Features2D_dataset1.mat');
 
 load(data_3d_file, 'f3D');
 load(data_2d_file, 'f2D');
