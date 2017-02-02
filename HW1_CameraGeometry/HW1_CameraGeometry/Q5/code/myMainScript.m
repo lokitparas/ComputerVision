@@ -28,8 +28,5 @@ M_err = getCalib(f3D_err, f2D_err);
 disp('Validating M_err');
 findError(f3D, f2D, M_err);
 
-% P = (f2D_err(:,:)-f2D); P=P(1:3,:); std2(P)
-% P = (f3D_err(:,:)-f3D); P=P(1:3,:); std2(P)
-% P = err*randn(size(f3D_err)); std2(P)
 
 toc;

@@ -2,8 +2,8 @@
 
 tic;
 %% Your code here
-%  folder = uigetdir();
-image = imread(strcat('..\input\testImg2.jpg'));
+folder = uigetdir();
+image = imread(strcat('..\testImg2.jpg'));
 figure(), imshow(image);
 [Xin1,Yin1] = getpts;
 [Xin2,Yin2] = getpts;
