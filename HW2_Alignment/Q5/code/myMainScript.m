@@ -1,7 +1,11 @@
 %% MyMainScript
 
-fixed = imread('../input/barbara.png');
-moving = imread('../input/negative_barbara.png');
+
+
+fixed = rgb2gray(imread('../input/flash1.jpg'));
+moving = rgb2gray(imread('../input/noflash1.jpg'));
+
+
 
 disp(max(max(moving)));
 disp(min(min(moving)));

@@ -1,0 +1,31 @@
+function [ R,T ] = iterate(A,B)
+%UNTITLED3 Summary of this function goes here
+%   Detailed explanation goes here
+
+correspond = knnsearch(B,A,'distance','euclidean');
+disp(correspond(1));
+C = B(correspond,:);
+
+mean_c = mean(C);
+mean_a = mean(A);
+
+C1 = C- ones(size(C))*diag(mean_c);
+A1 = A-mean_a;
+
+[U,S,V] = svd(C'*A);
+
+
+
+R = V*U';
+D = det(R);
+if(D == -1)
+    J = [1,0,0;0,1,0;0,0,-1];
+    R = V*J*U';
+
+disp(R);
+
+T = mean(A)' - R*mean(C)';
+
+
+end
+
