@@ -31,8 +31,8 @@ for theta = -60:60
     end
 end
 
-surf(entroplot);
-% axis([-12,12,-60,60,min(entroplot(:))-1,max(entroplot(:))+1]);
+surf(entroplot)
+axis(-1)
 
 
 [minv,id] = min(entroplot(:));
