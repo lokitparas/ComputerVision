@@ -1,17 +1,18 @@
 %% MyMainScript
 
+
+
+% fixed = rgb2gray(imread('../input/barbara.png'));
+% moving = rgb2gray(imread('../input/negative_barbara.png'));
+
 [file,path] = uigetfile({'*.jpg;*.png'});
 [file1,path1] = uigetfile({'*.jpg;*.png'});
 fixed = imread(strcat(path,'/',file));
 moving = imread(strcat(path1,'/',file1));
 
 sz = size(size(fixed));
+if(sz(2)
 
-if(sz(2) > 2)
-    fixed = rgb2gray(fixed);
-    moving = rgb2gray(moving);
-end
-% 
 % moving1 = imrotate(moving,180,'crop');
 % moving1 = imtranslate(moving1,[-210,-60]);
 
@@ -36,16 +37,14 @@ end
 figure(),imshow(fixed);
 figure(),imshow(moving);
 
-figure(),surf(entroplot);
+surf(entroplot);
+% axis([-12,12,-60,60,min(entroplot(:))-1,max(entroplot(:))+1]);
+
 
 [minv,id] = min(entroplot(:));
 [row,col] = ind2sub(size(entroplot),id);
-disp('rotate by');
 disp(61-row);
-disp('translate by');
 disp(13-col);
-
-disp('minimum entropy');
 disp(min(min(entroplot)));
 
 % im = imagetrans(moving1,-(61-row), -(13-col));
