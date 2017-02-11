@@ -1,7 +1,4 @@
 function [ R,T ] = rigidtrans(A,C)
-%UNTITLED3 Summary of this function goes here
-%   Detailed explanation goes here
-
 
 mean_c = mean(C);
 mean_a = mean(A);
