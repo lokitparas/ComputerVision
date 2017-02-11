@@ -33,10 +33,10 @@ for theta = -60:60
     end
 end
 
-figure(),imshow(fixed);
-figure(),imshow(moving);
-
-figure(),surf(entroplot);
+X = repmat((-60:60)',1,25);
+Y = repmat((-12:12),121,1);
+surf(X,Y, entroplot);
+% axis([-12,12,-60,60,min(entroplot(:))-1,max(entroplot(:))+1]);
 
 [minv,id] = min(entroplot(:));
 [row,col] = ind2sub(size(entroplot),id);
@@ -48,9 +48,6 @@ disp(13-col);
 disp('minimum entropy');
 disp(min(min(entroplot)));
 
-% im = imagetrans(moving1,-(61-row), -(13-col));
-% figure(),imshow(im);
-% disp(find(entroplot,min(min(entroplot))));
 
 
 
