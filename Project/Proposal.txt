@@ -1,0 +1,10 @@
+Team Members:
+Anand Bhoraskar 130050025
+Lokit Kumar Paras 130050047
+Maitreyee Mulawkar 13D170011
+
+Paper to be implemented : Real-Time Tracking of Non-Rigid Ob jects using Mean Shift (http://comaniciu.net/Papers/MsTracking.pdf)
+
+Dataset : Several short videos consisting of moving objects. We plan to create our own videos for testing the algorithm.
+
+Evaluation/Validation Strategy : We plan to test the correctness of implementation by visual inspection. If the algorithm works properly, it will track the object throughout all frames.
