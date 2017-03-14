@@ -1,8 +1,8 @@
 clear;
 
-path = '/Users/anand/Desktop/sem8/vision/assgn/HW3_VideoStabilization_RobustAlignment/Q1/input/SampleVideos';
+path = 'C:\Users\lokit\OneDrive_1\Documents\sem8\Vision\ComputerVision\HW3_VideoStabilization_RobustAlignment\Q1\input\SampleVideos';
 
-fileName = strcat(path, '/cars.avi');
+fileName = strcat(path, '\cars.avi');
 
 addpath('./MMread');
 

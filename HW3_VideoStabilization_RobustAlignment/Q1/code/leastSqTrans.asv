@@ -1,0 +1,10 @@
+function [ output_args ] = leastSqTrans( matched )
+%UNTITLED Summary of this function goes here
+%   Detailed explanation goes here
+
+    trans = sqrt((matched(:,1) - matched(:,3)).^2 + (matched(:,2) - matched(:,4)).^2);  
+    
+    
+
+end
+

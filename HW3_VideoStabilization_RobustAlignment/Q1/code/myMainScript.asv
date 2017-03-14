@@ -34,6 +34,7 @@ error = smoothed - trans;
 
 video1 = video;
 
+for i = 1 : 
 
 
 
