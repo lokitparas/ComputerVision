@@ -1,5 +1,5 @@
 function [ trans ] = leastSqTrans( matched )
-%UNTITLED Summary of this function goes here
+%   Summary of this function goes here
 %   Detailed explanation goes here
 
     trans_x = (matched(:,1) - matched(:,3)); 
