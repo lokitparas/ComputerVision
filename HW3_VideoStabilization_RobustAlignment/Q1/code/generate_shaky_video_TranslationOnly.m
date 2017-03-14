@@ -1,6 +1,13 @@
 clear;
 
-a = mmread('E:\VideoStab\Stable\fountain_dyntex.avi');
+path = '/Users/anand/Desktop/sem8/vision/assgn/HW3_VideoStabilization_RobustAlignment/Q1/input/SampleVideos';
+
+fileName = strcat(path, '/cars.avi');
+
+addpath('./MMread');
+
+
+a = mmread(fileName);
 framerate = a.rate;
 vid = zeros(a.height,a.width,a.nrFramesTotal);
 
@@ -16,6 +23,6 @@ for i=1:a.nrFramesTotal
     vid(:,:,i) = d;
 end
   
-filename = 'shaky_fountain_dyntex.avi';
+filename = '../input/shaky_cars.avi';
 writevideo(filename,vid/max(vid(:)),framerate);
     
