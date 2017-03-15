@@ -8,7 +8,7 @@
 %
 % Example: match('scene.pgm','book.pgm');
 
-function num = match(image1, image2)
+function [num, matched] = match(image1, image2)
 
 % Find SIFT keypoints for each image
 [im1, des1, loc1] = sift(image1);
@@ -43,23 +43,23 @@ im3 = appendimages(im1,im2);
 
 
 % Show a figure with lines joining the accepted matches.
-figure('Position', [100 100 size(im3,2) size(im3,1)]);
-colormap('gray');
-imagesc(im3);
-hold on;
+% figure('Position', [100 100 size(im3,2) size(im3,1)]);
+% colormap('gray');
+% imagesc(im3);
+% hold on;
 cols1 = size(im1,2);
 
-matched;
+matched= [];
 
 for i = 1: size(des1,1)
   if (match(i) > 0)
-      matched = [matched ; loc1(i,1), loc
+      matched = [matched ; loc1(i,2), loc1(i,1), loc2(match(i),2), loc2(match(i),1)];
       
-      line([loc1(i,2) loc2(match(i),2)+cols1], ...
-         [loc1(i,1) loc2(match(i),1)], 'Color', 'c');
+%       line([loc1(i,2) loc2(match(i),2)+cols1], ...
+%          [loc1(i,1) loc2(match(i),1)], 'Color', 'c');
   end
 end
-hold off;
+% hold off;
 num = sum(match > 0);
 fprintf('Found %d matches.\n', num);
 
