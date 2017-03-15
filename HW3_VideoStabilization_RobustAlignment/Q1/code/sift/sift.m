@@ -41,7 +41,7 @@ fclose(f);
 
 % Call keypoints executable
 if isunix
-    command = '!./sift ';
+    command = '!./sift/sift ';
 else
     command = '!siftWin32 ';
 end

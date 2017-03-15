@@ -1,8 +1,6 @@
-clear;
-
-path = 'C:\Users\lokit\OneDrive_1\Documents\sem8\Vision\ComputerVision\HW3_VideoStabilization_RobustAlignment\Q1\input\SampleVideos';
-
-fileName = strcat(path, '\cars.avi');
+% path = 'C:\Users\lokit\OneDrive_1\Documents\sem8\Vision\ComputerVision\HW3_VideoStabilization_RobustAlignment\Q1\input\SampleVideos';
+path = '/home/maitreyee/Desktop/Sem8/vision/ComputerVision/HW3_VideoStabilization_RobustAlignment/Q1/input/SampleVideos';
+fileName = strcat(path, '/cars.avi');
 
 addpath('./MMread');
 
@@ -16,6 +14,7 @@ for i=1:a.nrFramesTotal
     [H,W] = size(b);
     if i > 1, tx = round(rand(1)*3); else tx = 0; end;
     if i > 1, ty = round(rand(1)*3); else ty = 0; end;
+    ty=0;
 
     d = b; d(:,:) = 0;
     d(ty+1:H,tx+1:W) = b(1:H-ty,1:W-tx);
