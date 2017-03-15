@@ -53,7 +53,7 @@ matched= [];
 
 for i = 1: size(des1,1)
   if (match(i) > 0)
-      matched = [matched ; loc1(i,1), loc1(i,2), loc2(match(i),1), loc2(match(i),2)];
+      matched = [matched ; loc1(i,2), loc1(i,1), loc2(match(i),2), loc2(match(i),1)];
       
 %       line([loc1(i,2) loc2(match(i),2)+cols1], ...
 %          [loc1(i,1) loc2(match(i),1)], 'Color', 'c');
