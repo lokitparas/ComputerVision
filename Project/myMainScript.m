@@ -6,7 +6,7 @@ fileFullName = strcat(path, '/', fileName);
 
 [video, audio_orig] = mmread(fileFullName);
 
-vid = zeros(360, 640, 1179);
+vid = uint8(zeros(360, 640, 1179));
 for i = 1:video.nrFramesTotal
     size(rgb2gray(video.frames(i).cdata));
     vid(:,:,i) = rgb2gray(video.frames(i).cdata);
