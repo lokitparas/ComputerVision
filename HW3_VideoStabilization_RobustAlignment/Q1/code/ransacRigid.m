@@ -1,8 +1,10 @@
-function [ trans ] = ransacRigid( matched )
+function [ trans ] = ransacRigid( matched, xc, yc )
 %   Summary of this function goes here
 %   Detailed explanation goes here
     A_pt = matched(:,3:4);
     C_pt = matched(:,1:2);
+    A_pt = A_pt - ones(size(A_pt))*diag([xc, yc]);
+    C_pt = C_pt - ones(size(C_pt))*diag([xc, yc]);
     
     num_votes = 0;
     trans = eye(3);
@@ -12,6 +14,7 @@ function [ trans ] = ransacRigid( matched )
         j= round(rand(1)*(length(matched)-1)+1);
         if i == j continue; end;
 %         for j= i+1:length(matched)
+
             A = [A_pt(i,:); A_pt(j,:)];
             C = [C_pt(i,:); C_pt(j,:)];
             mean_c = mean(C);
@@ -20,7 +23,7 @@ function [ trans ] = ransacRigid( matched )
             C1 = C -ones(size(C))*diag(mean_c);
             A1 = A -ones(size(A))*diag(mean_a);
 
-            [U,S,V] = svd(C1'*A1);
+            [U,~,V] = svd(C1'*A1);
             J = [1,0;0,det(V*U')];
             R = V*J*U';
             % disp(R);

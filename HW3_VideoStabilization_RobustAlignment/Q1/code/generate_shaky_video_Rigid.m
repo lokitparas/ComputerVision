@@ -13,8 +13,8 @@ for i=1:a.nrFramesTotal
     [H,W] = size(b);
     if i > 1, tx = round(rand(1)*3); else tx = 0; end;
     if i > 1, ty = round(rand(1)*3); else ty = 0; end;
+    tx=0; ty=0;
     if i > 1,theta(i) = randn(1)*2;else theta(i) = 0; end;
-    tx  = 0; ty=0;
     c = imrotate(b,theta(i),'bilinear','crop');    
     d = c; d(:,:) = 0;
     d(ty+1:H,tx+1:W) = c(1:H-ty,1:W-tx);

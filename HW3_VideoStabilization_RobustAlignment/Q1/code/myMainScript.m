@@ -2,11 +2,11 @@
     addpath('./MMread');
     addpath('./sift');
 
-    tic;
+%     tic;
 
     % path = uigetdir();
     path = '/home/maitreyee/Desktop/Sem8/vision/ComputerVision/HW3_VideoStabilization_RobustAlignment/Q1/input';
-    fileName = 'shaky_gbus.avi';
+    fileName = 'shaky_gbus_rigid.avi';
     fileFullName = strcat(path, '/', fileName);
 
     [video, audio_orig] = mmread(fileFullName);
@@ -17,39 +17,43 @@
         [num, matched] = match(video.frames(i-1).cdata, video.frames(i).cdata);
         sift_points{i} = matched;
     end
+    
 
-%     trans = [0,0];
 %     for i = 2:length(video.frames)
 %         trans_last = trans(end,:);
-%         trans = [trans; trans_last+ransacTrans(sift_points{i})];
+%         trans = [trans; trans_last+ransacTrans(sift_points{i}), 0];
 %     end
-%     windowsize = 10;
-%     b= (1/windowsize)*ones(1,windowsize);
-%     a=1;
-% 
-%     smoothed = filter(b,a,trans);
-%     plot3(1:length(trans),trans(:,1), trans(:,2));
-%     hold on;
-%     plot3(1:length(trans),smoothed(:,1), smoothed(:,2));
-%     hold off;
     
     trans = [0, 0, 0]; % tx, ty, angle
     trans_last = eye(3);
+    [H1,H2] = size(video.frames(1).cdata);
+    xc = round(H2/2); yc = round(H1/2);
+            
     for i = 2:length(video.frames)
-        curr = ransacRigid(sift_points{i})*trans_last;
-        angle = atan2(curr(1,2), curr(1,1))* 180 /pi;
-        trans = [trans; curr(1,3) , curr(2,3), angle];
+        curr = ransacRigid(sift_points{i}, xc, yc)*trans_last;
+        x = curr(1,3);
+        y = curr(2,3);
+        angle = asin(curr(1,2))* 180 /pi;
+        trans = [trans; x , y, angle];
         trans_last = curr;
     end
-    
-    windowsize = 30;
+
+    smoothed = trans;
+    windowsize = 20;
     b= (1/windowsize)*ones(1,windowsize);
     a=1;
-
-    smoothed = filter(b,a,trans);
-    plot3(1:length(trans),trans(:,1), trans(:,2));
+    smoothed(:,1) = filter(b,a,trans(:,1));
+    smoothed(:,2) = filter(b,a,trans(:,2));
+    smoothed(:,3) = filter(b,a,trans(:,3));
+    
+    
+    figure(),plot3(1:length(trans),trans(:,1), trans(:,2));
     hold on;
     plot3(1:length(trans),smoothed(:,1), smoothed(:,2));
+    hold off;
+    figure(),plot(1:length(trans),trans(:,3));
+    hold on;
+    plot(1:length(trans),smoothed(:,3));
     hold off;
     
     error = smoothed - trans;
@@ -67,7 +71,6 @@
         stable_video(:,:,i) = comb_frame;
     end
 
-    % displayvideo(stable_video, 1/video.rate);
     outputFileName = strcat('../output/corr_', fileName);
     writevideo(outputFileName, stable_video, video.rate);
 
