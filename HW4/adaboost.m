@@ -3,7 +3,7 @@ function [ i, theta, p, alpha, w ] = adaboost( X, Y, w)
 %   Detailed explanation goes here
 [i, theta, p, error] = find_best(X,Y,w);
 alpha = 1/2 * ln((1-error)/error);
-pred = p*(X(:,i) - theta);
+pred = (p*(X(:,i) - theta) >= 0);
 w= w .* (exp(-alpha) * exp(2*alpha (pred==Y))); 
 
 end

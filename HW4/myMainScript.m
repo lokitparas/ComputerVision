@@ -3,10 +3,13 @@
 % Training
 T =40;
 n = size(X,1);
+d = size(X,2);
 w = ones(n)/ n;
+H = zeros(T, d)
 for t = 1:T
     [ i, theta, p, alpha, w ] = adaboost(X, Y, w);
-    % How to add these functions to get H?? maybe use formula
+    H(t, :) = [i, theta, p, alpha];
 end
 
 % Testing
+

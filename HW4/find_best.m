@@ -10,14 +10,14 @@ n = size(X,1);
 for j = 1:d
    % find theta and p minimizing error
    for k = unique(X(:,j))
-    for sign = [-1, 1]
+    for q = [-1, 1]
         % better way to iterate
-        pred = sign*(X(:,j)-k);
+        pred = (q*(X(:,j)-k) >= 0);
         curr_error = sum(w .* (pred ~=Y));
         if(curr_error < error)
             error= curr_error;
             i = j;
-            p = sign;
+            p = q;
             theta = k;
         end
     end
