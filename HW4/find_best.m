@@ -11,19 +11,21 @@ for j = 1:col
    % find theta and p minimizing error
    temp = unique(X(:,j));
    for k = temp'
-    for q = [-1, 1]
+     for q = [-1, 1]
         % better way to iterate
-        pred = (q*(X(:,j)-k) >= 0);
+%         pred = (q*(X(:,j)-k) >= 0); // Here, boundary points are always
+%         labelled 1
+        pred = ((X(:,j)-k >= 0)*2-1)*p;
 %         disp(k);
-%         curr_error = sum(w .* (pred ~=Y));
-        curr_error = sum(w .* pred);
+        curr_error = sum(w .* (pred ~=Y));
+%         curr_error = sum(w .* pred);
         if(curr_error < error)
             error= curr_error;
             i = j;
             p = q;
             theta = k;
         end
-    end
+     end
    end
 end
 
