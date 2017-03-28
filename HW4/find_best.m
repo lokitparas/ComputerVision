@@ -15,7 +15,7 @@ for j = 1:col
         % better way to iterate
 %         pred = (q*(X(:,j)-k) >= 0); // Here, boundary points are always
 %         labelled 1
-        pred = ((X(:,j)-k >= 0)*2-1)*p;
+        pred = ((X(:,j)-k >= 0)*2-1)*q;
 %         disp(k);
         curr_error = sum(w .* (pred ~=Y));
 %         curr_error = sum(w .* pred);
