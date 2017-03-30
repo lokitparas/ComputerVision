@@ -1,5 +1,5 @@
 A = [];
-for i = 1:10
+for i = 1:2000
 % x = rand();
 % y = rand();
 % label = -1;
@@ -32,3 +32,4 @@ for i = 1:10
 end
 save dataset4.mat A;
 plot(A(:,1), A(:,2),'+');
+scatter(A(:,1), A(:,2), 30, A(:,3), 'x');

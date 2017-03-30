@@ -1,7 +1,7 @@
 function [I,labels,I_test,labels_test] = readMNIST()
 
 %===========
-path = 'train-images.idx3-ubyte';
+path = './mnist/train-images-idx3-ubyte';
 fid = fopen(path,'r','b');  %big-endian
 magicNum = fread(fid,1,'int32');   
 if(magicNum~=2051) 
@@ -18,7 +18,7 @@ end
 fclose(fid);
 
 %============
-path = 'train-labels.idx1-ubyte';
+path = './mnist/train-labels-idx1-ubyte';
 fid = fopen(path,'r','b');  % big-endian
 magicNum = fread(fid,1,'int32');    
 if(magicNum~=2049) 
@@ -31,8 +31,8 @@ labels = uint8(fread(fid,itmNum,'uint8'));
 
 fclose(fid);
 
-%============×
-path = 't10k-images.idx3-ubyte';
+%============?
+path = './mnist/t10k-images-idx3-ubyte';
 fid = fopen(path,'r','b');  % big-endian
 magicNum = fread(fid,1,'int32');   
 if(magicNum~=2051) 
@@ -49,7 +49,7 @@ end
 fclose(fid);
 
 %============
-path = 't10k-labels.idx1-ubyte';
+path = './mnist/t10k-labels-idx1-ubyte';
 fid = fopen(path,'r','b');  % big-endian
 magicNum = fread(fid,1,'int32');   
 if(magicNum~=2049) 
