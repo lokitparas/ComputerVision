@@ -13,12 +13,8 @@ for j = 1:col
    for k = temp'
      for q = [-1, 1]
         % better way to iterate
-%         pred = (q*(X(:,j)-k) >= 0); // Here, boundary points are always
-%         labelled 1
         pred = ((X(:,j)-k >= 0)*2-1)*q;
-%         disp(k);
         curr_error = sum(w .* (pred ~=Y));
-%         curr_error = sum(w .* pred);
         if(curr_error < error)
             error= curr_error;
             i = j;
