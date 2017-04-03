@@ -9,11 +9,14 @@ A = A(1:1000, :);
 X = A(:,1:2); 
 Y = A(:,3);
 
+% UNCOMMENT FOR PART 5
 % [I,labels,I_test,labels_test] = readMNIST();
 % I = I(1:5000);
 % labels = labels(1:5000);
+% UNCOMMENT FOR PART 5A
 % % labels = (labels==2)*2-1;
 % % labels_test = (labels_test==2)*2-1;
+% UNCOMMENT FOR PART 5B
 % labels = (labels==2|labels==3)*2-1;
 % labels_test = (labels_test==2|labels_test==3)*2-1;
 % 
