@@ -12,7 +12,8 @@ for j = 1:col
    temp = unique(X(:,j));
    for k = temp'
      for q = [-1, 1]
-        pred = ((X(:,j)-k > 0)*2-1)*q;
+        % better way to iterate
+        pred = ((X(:,j)-k >= 0)*2-1)*q;
         curr_error = sum(w .* (pred ~=Y));
         if(curr_error < error)
             error= curr_error;

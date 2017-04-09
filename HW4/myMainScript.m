@@ -9,16 +9,17 @@ A = A(1:1000, :);
 X = A(:,1:2); 
 Y = A(:,3);
 
-% UNCOMMENT FOR PART 5
 % [I,labels,I_test,labels_test] = readMNIST();
 % I = I(1:5000);
 % labels = labels(1:5000);
-% UNCOMMENT FOR PART 5A
+
+% % % FOR PART 5 part A
 % % labels = (labels==2)*2-1;
 % % labels_test = (labels_test==2)*2-1;
-% UNCOMMENT FOR PART 5B
-% labels = (labels==2|labels==3)*2-1;
-% labels_test = (labels_test==2|labels_test==3)*2-1;
+
+% % % FOR PART 5 part B
+% % labels = (labels==2|labels==3)*2-1;
+% $labels_test = (labels_test==2|labels_test==3)*2-1;
 % 
 % num_train = size(I,2);
 % X = zeros(num_train, 784);
@@ -47,9 +48,8 @@ test_err = zeros(T,1);
 for t = 1:T
     disp(t);
     [ i, theta, p, alpha, w ] = adaboost(X, Y, w);
-%     temp = [i, theta, p, alpha];
     H(t, :) = [i, theta, p, alpha];
-%     disp(H(t,:));
+
     
 %     For printing the training error
     [~, train_err(t,1)] = computeError(H(1:t, :), X, Y);
@@ -62,4 +62,3 @@ figure();scatter(test_data(:,1), test_data(:,2), 30, pred, 'x');
 // figure();scatter(test_data(:,1), test_data(:,2), 30, test_labels, 'x');
 
 % Testing
-
