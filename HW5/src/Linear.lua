@@ -2,14 +2,14 @@ require 'torch'
 
 local Linear = torch.class('Linear')
 
-function Linear:init(num_input, num_output)
+function Linear:__init(size_input, size_output)
 	-- appropriately initialize
-	self.output = torch.zeros(num_output, 1)
-	self.W = torch.rand(num_output, num_input)
-	self.B = torch.rand(num_output, 1)
-	self.gradW = torch.zeros(num_output, num_input)
-	self.gradB = torch.zeros(num_output, 1)
-	self.gradInput = torch.zeros(num_input, 1)
+	self.output = torch.zeros(size_output, 1)
+	self.W = torch.rand(size_output, size_input)
+	self.B = torch.rand(size_output, 1)
+	self.gradW = torch.zeros(size_output, size_input)
+	self.gradB = torch.zeros(size_output, 1)
+	self.gradInput = torch.zeros(size_input, 1)
 end
 
 function Linear:forward(input)
@@ -21,10 +21,17 @@ end
 
 function Linear:backward(input, gradOutput)
 	-- computes and updates the state variables gradInput, gradW and gradB and also returns gradInput
-	self.gradW = gradOutput * input:t()
-	self.gradB = gradOutput
-	self.gradInput = self.W:t() *gradOutput  
-	return self.gradInput
+	
+	-- self.gradW = gradOutput * input:t()
+	-- self.gradB = gradOutput
+	-- self.gradInput = self.W:t() *gradOutput  
+	-- return self.gradInput
+
+	self.gradW = self.gradW + gradOutput * input:t()
+	self.gradB = self.gradB + gradOutput
+	self.gradInput = self.gradInput + self.W:t() *gradOutput  
+	return self.W:t() *gradOutput  
+
 end
 
 function Linear:clearGradParam()

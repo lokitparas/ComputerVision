@@ -2,7 +2,7 @@ require 'torch'
 
 local ReLU = totch.class('ReLU')
 
-function ReLU:init( )
+function ReLU:__init()
 	-- may be empty
 end
 
@@ -18,14 +18,23 @@ function ReLU:backward(input, gradOutput)
 	-- computes and returns the gradient of the Loss with respect to the input 
 	-- to this layer, updates the corresponding state variable gradInput and also returns it
 	-- x>0 : 1 else 0
-	self.gradInput = input
-	self.gradInput[torch.gt(self.gradInput, 0.0)] = 1.0
-	self.gradInput[torch.lt(self.gradInput, 0.0)] = 0.0
 
-	-- Loss = 0 if x>0 else -x
-	local loss = -input
-	loss[torch.lt(x, 0.0)] = 0.0
-	return loss, self.gradInput
+	-- self.gradInput = input
+	-- self.gradInput[torch.gt(self.gradInput, 0.0)] = 1.0
+	-- self.gradInput[torch.lt(self.gradInput, 0.0)] = 0.0
+	-- return self.gradInput
+
+
+	local lgradInput = input
+	lgradInput[torch.gt(lgradInput, 0.0)] = 1.0
+	lgradInput[torch.lt(lgradInput, 0.0)] = 0.0
+
+	if self.gradInput then 
+		self.gradInput = self.gradInput + lgradInput
+	else
+		self.gradInput = lgradInput
+	end
+	return lgradInput
 end
 
 function ReLU:clearGradParam()
