@@ -16,7 +16,7 @@ end
 function Linear:forward(input)
 	-- computes and returns the output of the layer and also saves it in the state variable output
 	-- input is size_input * batch_size
-	self.output = self.B::repeatTensor(self.batch_size) + self.W * input
+	self.output = self.B:repeatTensor(1, self.batch_size) + self.W * input
 	return self.output
 
 end

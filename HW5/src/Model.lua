@@ -16,7 +16,7 @@ function Model:forward(input)
 	-- TODO Inputs should be always considered as batches. (num_input * batch_size)
 	local linput = input
 	for k=1, self.numLayers do
-		linput = Layers[k]:forward(linput)
+		linput = self.Layers[k]:forward(linput)
 	end
 	return linput
 end

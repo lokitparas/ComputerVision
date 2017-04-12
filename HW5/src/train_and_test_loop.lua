@@ -1,5 +1,5 @@
-function get_xi(data_x, idx)   
-    xi = (data_x[idx]:float() - x_mean)
+function get_xi(data_x, idx)  
+    xi = (data_x[idx]:double() - x_mean)
     xi = xi:cdiv(x_std)
     xi = xi:reshape(3*32*32)
     return xi
@@ -31,12 +31,14 @@ function train_and_test_loop(no_iterations, lr, lambda, batchsize)
  
 
         --making batches
-        x_batch = torch.zeros(batchsize, tr_x:size(2))
-        t_batch = torch.zeros(batchsize, tr_y:size(1))
+        x_batch = torch.zeros(tr_x:size(2), batchsize)
+        t_batch = torch.zeros(batchsize)
 
-        for j = 0, batchsize do
+        for j = 1, batchsize do
+            -- print(j)
             idx = shuffle[mod(i+j, tr_x:size(1)) + 1] 
-            x_batch[j] = get_xi(tr_x, idx) 
+            -- print(idx)
+            x_batch[{{}, j}] = get_xi(tr_x, idx) 
             t_batch[j] = tr_y[idx]
         end
 
@@ -44,9 +46,9 @@ function train_and_test_loop(no_iterations, lr, lambda, batchsize)
         -- do forward of the model, compute loss
         -- and then do backward of the model
 
-        op = Model:forward(x_batch)
-        loss_tr = criterion:forward(op, t_batch, model, lambda)
-        dl_do = criterion:backward(op, t_batch)
+        op = model:forward(x_batch)
+        loss_tr = Criterion:forward(op:t(), t_batch)
+        dl_do = Criterion:backward(op:t(), t_batch)
         model:backward(x_batch, dl_do)
         epochloss_tr = epochloss_tr + loss_tr
 
