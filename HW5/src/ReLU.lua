@@ -1,6 +1,6 @@
 require 'torch'
 
-local ReLU = totch.class('ReLU')
+local ReLU = torch.class('ReLU')
 
 function ReLU:__init()
 	-- may be empty
@@ -9,6 +9,7 @@ end
 function ReLU:forward(input)
 	-- computes the output of the layer and also updates the state variable output
 	-- max(0,x)
+	-- input of size size_input * batch_size
 	self.output = input
 	self.output[torch.lt(self.output,0.0)] = 0.0
 	return self.output
@@ -18,6 +19,7 @@ function ReLU:backward(input, gradOutput)
 	-- computes and returns the gradient of the Loss with respect to the input 
 	-- to this layer, updates the corresponding state variable gradInput and also returns it
 	-- x>0 : 1 else 0
+	-- input of size size_input * batch_size
 
 	-- self.gradInput = input
 	-- self.gradInput[torch.gt(self.gradInput, 0.0)] = 1.0

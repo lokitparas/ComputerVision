@@ -1,6 +1,6 @@
 require 'torch'
 
-local Model = totch.class('Model')
+local Model = torch.class('Model')
 
 function Model:__init( )
 	self.Layers = {}
@@ -13,7 +13,7 @@ end
 
 function Model:forward(input)
 	-- returns the output of the last Layer contained in model
-	-- TODO Inputs should be always considered as batches. (num_input * num_observations)
+	-- TODO Inputs should be always considered as batches. (num_input * batch_size)
 	local linput = input
 	for k=1, self.numLayers do
 		linput = Layers[k]:forward(linput)

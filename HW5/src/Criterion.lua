@@ -1,6 +1,6 @@
 require 'torch'
 
-local Criterion = totch.class('Criterion')
+local Criterion = torch.class('Criterion')
 
 function Criterion:forward(input, target)
 	-- which takes an input of size (batchsize) × (number of
@@ -25,6 +25,6 @@ function Criterion:backward(input, target)
 	local norm = torch.sum(soft)
 	soft = soft / norm
 	local grad = soft
-	grad[target] = grad[target] -1
+	grad[target] = grad[target] - 1
 	return grad
 end
