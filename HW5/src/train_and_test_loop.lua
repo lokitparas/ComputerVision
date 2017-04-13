@@ -24,7 +24,7 @@ function evaluate(model, data_x, data_y)
         op = model:forward(xi)
         _, op_label = torch.max(op, 1)
         ti = data_y[idx]
-        if ti ~= op_label[1] then
+        if ti ~= op_label[1][1] then
             errors = errors + 1
         end
     end
@@ -33,6 +33,7 @@ end
 
 function train_and_test_loop(no_iterations, lr, lambda, batchsize)
     for i = 0, no_iterations do
+        -- print(model.Layers[1].B)
         -- shuffle data
         if mod(i, tr_x:size(1)) == 0 then
             shuffle = torch.randperm(tr_x:size(1))
@@ -87,8 +88,9 @@ function train_and_test_loop(no_iterations, lr, lambda, batchsize)
 
         -- udapte model weights
         model:gradient_descent(lr)
+        model:clearGradParam()
 
-        if mod(i, 1000) == 0 then
+        if mod(i, 100) == 0 then
             if i ~= 0 then
                 table.insert(epochlosses_te, epochloss_te/1000)
                 table.insert(epochlosses_tr, epochloss_tr/1000)
@@ -105,5 +107,11 @@ function train_and_test_loop(no_iterations, lr, lambda, batchsize)
             -- collectgarbage()
         end
         -- print(i)
+        -- print('op')
+        -- print(op:t())
+        -- print('dl_do')
+        -- print(dl_do)
+        -- print('loss_tr')
+        -- print(loss_tr)
     end
 end

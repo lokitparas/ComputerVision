@@ -35,7 +35,7 @@ epochloss_tr = 0
 epochlosses_tr = {}
 epochlosses_te = {}
 
-batchsize = 2
+batchsize = 1
 
 -- define the model and criterion
 layer1 = Linear.new(3*32*32, 10, batchsize)
