@@ -12,7 +12,7 @@ function Criterion:forward(input, target)
 	local batchsize = input:size(1)
 	local llog = 0.0
 	for i=1,batchsize do
-		llog = -torch.log(soft[i][target] / norm[i])
+		llog = -torch.log(soft[i][target[i]] / norm[i][1])
 		loss = loss + llog
 	end
 	loss = loss / batchsize

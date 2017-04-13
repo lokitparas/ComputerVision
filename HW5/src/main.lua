@@ -13,7 +13,15 @@ te_x = torch.load('../data/te_data.bin')
 -- te_y = torch.load('./te_labels.bin'):double() + 1
 
 tr_x = torch.reshape(tr_x, tr_x:size(1), tr_x:size(2)*tr_x:size(3)*tr_x:size(4))
-te_x = torch.reshape(te_x, te_x:size(1), te_x:size(2)*te_x:size(3)*te_x:size(4))
+
+-- For cross validation
+te_x = tr_x:sub(40001, 50000)
+tr_x = tr_x:sub(1, 40000)
+te_y = tr_y:sub(40001, 50000)
+tr_y = tr_y:sub(1, 40000)
+
+
+-- te_x = torch.reshape(te_x, te_x:size(1), te_x:size(2)*te_x:size(3)*te_x:size(4))
 
 besterr = 1e10
 
@@ -40,4 +48,4 @@ criterion = Criterion.new()
 lr = 0.00001
 lambda = 0.0
 -- batchsize = 100
-train_and_test_loop(10, lr, lambda, batchsize)
+train_and_test_loop(1000000, lr, lambda, batchsize)

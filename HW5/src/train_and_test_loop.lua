@@ -1,3 +1,6 @@
+
+-- package.loaded["train_and_test_loop"] = nil; require("train_and_test_loop"); criterion = Criterion.new();
+
 function get_xi(data_x, idx)  
     xi = (data_x[idx]:double() - x_mean)
     xi = xi:cdiv(x_std)
@@ -9,9 +12,23 @@ function mod(a, b)
     return a - math.floor(a/b)*b
 end
 
-function gradient_descent(model, lr)
-    model.W = model.W + lr * model.gradW
-    model.b = model.b + lr * model.gradb
+randomIdx = {}
+for i = 1,100 do
+    table.insert(randomIdx, math.random(10000))
+end
+function evaluate(model, data_x, data_y) 
+    errors = 0
+    for i = 1,#randomIdx do
+        idx = randomIdx[i]
+        xi = get_xi(data_x, idx)
+        op = model:forward(xi)
+        _, op_label = torch.max(op, 1)
+        ti = data_y[idx]
+        if ti ~= op_label[1] then
+            errors = errors + 1
+        end
+    end
+    return errors/#randomIdx
 end
 
 function train_and_test_loop(no_iterations, lr, lambda, batchsize)
@@ -47,29 +64,29 @@ function train_and_test_loop(no_iterations, lr, lambda, batchsize)
         -- and then do backward of the model
 
         op = model:forward(x_batch)
-        loss_tr = Criterion:forward(op:t(), t_batch)
-        dl_do = Criterion:backward(op:t(), t_batch)
-        model:backward(x_batch, dl_do)
+        loss_tr = criterion:forward(op:t(), t_batch)
+        dl_do = criterion:backward(op:t(), t_batch)
+        model:backward(x_batch, dl_do:t())
         epochloss_tr = epochloss_tr + loss_tr
 
         -- test input and target
-        x_test_batch = torch.zeros(batchsize, te_x:size(2))
-        t_test_batch = torch.zeros(batchsize, te_y:size(1))
+        x_test_batch = torch.zeros(te_x:size(2), batchsize)
+        t_test_batch = torch.zeros(batchsize)
 
 
-        for j = 0, batchsize do
+        for j = 1, batchsize do
             idx = shuffle_te[mod(i+j, te_x:size(1)) + 1] 
-            x_test_batch[j] = get_xi(te_x, idx) 
+            x_test_batch[{{}, j}] = get_xi(te_x, idx) 
             t_test_batch[j] = te_y[idx]
         end
 
         -- do forward of the model and compute loss
         op = model:forward(x_test_batch) 
-        loss_te = criterion:forward(op, t_test_batch, model, lambda)
+        loss_te = criterion:forward(op:t(), t_test_batch)
         epochloss_te = epochloss_te + loss_te
 
         -- udapte model weights
-        gradient_descent(model, lr)
+        model:gradient_descent(lr)
 
         if mod(i, 1000) == 0 then
             if i ~= 0 then
@@ -82,10 +99,11 @@ function train_and_test_loop(no_iterations, lr, lambda, batchsize)
             print('iter: '..i.. ', accuracy: '..(1 - err)*100 ..'%')
             if (err < besterr) then
                 besterr = err
-                bestmodel:copy(model)
+                -- bestmodel:copy(model)
                 print(' -- best accuracy achieved: '.. (1- besterr)*100 ..'%')
             end
-            collectgarbage()
+            -- collectgarbage()
         end
+        -- print(i)
     end
 end

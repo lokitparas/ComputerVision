@@ -28,12 +28,12 @@ function Model:backward(input, gradOutput)
 	local linput
 	local lgradOutput = gradOutput
 	for k=self.numLayers,2,-1 do
-		linput = Layers[k-1].output 
-		lgradOutput = Layers[k]:backward(linput, lgradOutput)
+		linput = self.Layers[k-1].output 
+		lgradOutput = self.Layers[k]:backward(linput, lgradOutput)
 	end
 	linput = input
 	if self.numLayers > 0 then
-		lgradOutput = Layers[1]:backward(linput, lgradOutput)
+		lgradOutput = self.Layers[1]:backward(linput, lgradOutput)
 	end
 end
 
@@ -42,18 +42,24 @@ function Model:dispGradParam()
 	-- closer to output displayed first. The output format is a 2D matrix for each Layer
 	-- with space separated elements.
 	for k=self.numLayers,1,-1 do
-		Layers[k]:dispGradParam()
+		self.Layers[k]:dispGradParam()
 	end
 end
 
 function Model:clearGradParam()
 	-- makes the gradients of the parameters to 0 for every Layer
 	for k=1, self.numLayers do
-		Layers[k]:clearGradParam()
+		self.Layers[k]:clearGradParam()
 	end
 end
 
 function Model:addLayer(layer)
 	self.numLayers = self.numLayers + 1
 	self.Layers[self.numLayers] = layer
+end
+
+function Model:gradient_descent(lr)
+	for k=self.numLayers,1,-1 do
+		self.Layers[k]:gradient_descent(lr)
+	end
 end
