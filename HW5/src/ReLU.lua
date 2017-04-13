@@ -46,3 +46,7 @@ end
 function ReLU:dispGradParam()
 	-- TODO
 end
+
+
+function ReLU:gradient_descent(lr)
+end

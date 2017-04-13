@@ -53,7 +53,7 @@ end
 
 
 function Linear:gradient_descent(lr)
-	self.W = self.W + lr * self.gradW
-    self.B = self.B + lr * self.gradB
+	self.W = self.W - lr * self.gradW
+    self.B = self.B - lr * self.gradB
 end
     

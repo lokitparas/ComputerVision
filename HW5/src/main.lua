@@ -1,5 +1,6 @@
 -- require 'Linear'
 require("Linear");
+require("ReLU");
 require("Model");
 require("Criterion");
 require("train_and_test_loop");
@@ -39,8 +40,10 @@ batchsize = 1
 
 -- define the model and criterion
 layer1 = Linear.new(3*32*32, 10, batchsize)
+-- layer2 = ReLU.new()
 model = Model.new()
 model:addLayer(layer1)
+-- model:addLayer(layer2)
 criterion = Criterion.new()
 -- bestmodel = Linear.new(0)
 
