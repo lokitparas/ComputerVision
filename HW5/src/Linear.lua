@@ -53,7 +53,21 @@ end
 
 
 function Linear:gradient_descent(lr)
-	self.W = self.W - lr * self.gradW
-    self.B = self.B - lr * self.gradB
+	local momentum_alpha = 0.3
+	if self.gradW_historical then 
+		self.gradW_historical = (1-momentum_alpha)*self.gradW + momentum_alpha*self.gradW_historical
+	else
+		self.gradW_historical = self.gradW
+	end
+
+	if self.gradB_historical then 
+		self.gradB_historical = (1-momentum_alpha)*self.gradB + momentum_alpha*self.gradB_historical
+	else
+		self.gradB_historical = self.gradB
+	end
+
+
+	self.W = self.W - lr * self.gradW_historical
+    self.B = self.B - lr * self.gradB_historical
 end
     

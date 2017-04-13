@@ -1,7 +1,12 @@
 require 'torch'
 require 'xlua'
+require("Linear");
+require("ReLU");
+require("Model");
+require("Criterion");
 
-local t={usage="Read problem statement for usage", version="9.0x"}
+
+local t={usage="Read problem statement for usage", version=""}
 local op = xlua.OptionParser(t)
 op:option{"-config", action='store', dest='config'}
 op:option{"-i", action='store', dest='i'}
@@ -12,20 +17,19 @@ op:option{"-ob", action='store', dest='ob'}
 op:option{"-og", action='store', dest='og'}
 
 local options,args = op:parse()
---
--- now options is the table of options (key, val) and args is the table with non-option arguments.
--- You can use op.fail(message) for failing and op.help() for printing the usage as you like.
---
 
-print(options)
+for k,v in pairs(options) do
+	print(k,v)
+end
 
-local f = io.open(options['config'], 'rb')
+model  = Model.new()
+local f = io.open(options['config'], 'r')
 lines = f:read "*a"
 
 local i = 1
 local line = lines[i].split()
 
-while 
+-- while 
 
 -- The file modelConfig.txt has the following format:
 -- (No. layers)
