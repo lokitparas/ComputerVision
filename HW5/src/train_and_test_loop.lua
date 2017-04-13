@@ -82,8 +82,8 @@ function train_and_test_loop(no_iterations, lr, lambda, batchsize)
         end
 
         -- do forward of the model and compute loss
-        op = model:forward(x_test_batch) 
-        loss_te = criterion:forward(op:t(), t_test_batch)
+        op_test = model:forward(x_test_batch) 
+        loss_te = criterion:forward(op_test:t(), t_test_batch)
         epochloss_te = epochloss_te + loss_te
 
         -- udapte model weights
@@ -109,9 +109,11 @@ function train_and_test_loop(no_iterations, lr, lambda, batchsize)
         -- print(i)
         -- print('op')
         -- print(op:t())
-        -- print('dl_do')
-        -- print(dl_do)
+        -- print('t_batch')
+        -- print(t_batch)
         -- print('loss_tr')
         -- print(loss_tr)
+        -- print('dl_do')
+        -- print(dl_do)
     end
 end
