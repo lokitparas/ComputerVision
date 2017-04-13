@@ -28,8 +28,8 @@ function ReLU:backward(input, gradOutput)
 
 
 	local lgradInput = input
-	lgradInput[torch.gt(lgradInput, 0.0)] = 1.0
-	lgradInput[torch.lt(lgradInput, 0.0)] = 0.0
+	lgradInput[torch.gt(lgradInput, 0.0)] = 1.0		-- why not use i
+	lgradInput[torch.lt(lgradInput, 0.0)] = 0.0		
 
 	if self.gradInput then 
 		self.gradInput = self.gradInput + lgradInput
