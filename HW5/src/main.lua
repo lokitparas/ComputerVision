@@ -40,14 +40,14 @@ batchsize = 20
 
 -- define the model and criterion
 model = Model.new()
-layer1 = Linear.new(3*32*32, 10, batchsize)
+layer1 = Linear.new(3*32*32, 3, batchsize)
 layer2 = ReLU.new()
-layer3 = Linear.new(3*32*32, 10, batchsize)
+layer3 = Linear.new(3, 10, batchsize)
 layer4 = ReLU.new()
 model:addLayer(layer1)
-model:addLayer(layer2)
+-- model:addLayer(layer2)
 model:addLayer(layer3)
-model:addLayer(layer4)
+-- model:addLayer(layer4)
 criterion = Criterion.new()
 bestmodel = Model.new()
 bestmodel:clone(model)

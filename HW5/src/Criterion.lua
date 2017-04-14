@@ -29,7 +29,7 @@ function Criterion:backward(input, target)
 		local soft = torch.exp(input[i])
 		local norm = torch.sum(soft)
 		soft = soft / norm
-		grad[i] = soft
+		grad[i] = soft:clone()
 		grad[i][tgt[i][1]] = grad[i][tgt[i][1]] - 1
 	end
 	return grad/batchsize

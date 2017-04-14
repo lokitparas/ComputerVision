@@ -68,13 +68,13 @@ function Linear:gradient_descent(lr)
 	if self.gradW_historical then 
 		self.gradW_historical = (1-momentum_alpha)*self.gradW + momentum_alpha*self.gradW_historical
 	else
-		self.gradW_historical = self.gradW
+		self.gradW_historical = self.gradW:clone()
 	end
 
 	if self.gradB_historical then 
 		self.gradB_historical = (1-momentum_alpha)*self.gradB + momentum_alpha*self.gradB_historical
 	else
-		self.gradB_historical = self.gradB
+		self.gradB_historical = self.gradB:clone()
 	end
 
 
