@@ -23,10 +23,6 @@ options['modelName']= "A"
 options['data']= "../data/tr_data.bin"
 options['target']= "../data/tr_labels.bin"
 --
-
-os.execute("mkdir -p " .. options['modelName'])
-torch.save(options['modelName'].."/model.bin", model)
-
 -- load training images
 tr_x = torch.load(options['data'])
 -- load training labels 
@@ -59,6 +55,9 @@ bestmodel = Model.new()
 bestmodel:clone(model)
 bestmodel.x_mean = model.x_mean
 bestmodel.x_std = model.x_std
+
+os.execute("mkdir -p " .. options['modelName'])
+torch.save(options['modelName'].."/model.bin", model)
 
 train(epochs, lr, lambda, batchsize)
 
