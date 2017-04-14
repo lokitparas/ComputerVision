@@ -22,6 +22,7 @@ end
 function Criterion:backward(input, target)
 	-- computes and returns the gradient of the Loss with respect to the input to this layer.
 	grad = torch.zeros(input:size())
+	local batchsize = input:size(1)
 	for i=1,batchsize do
 		local soft = torch.exp(input[i])
 		local norm = torch.sum(soft)
