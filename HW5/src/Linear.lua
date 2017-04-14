@@ -36,8 +36,8 @@ function Linear:backward(input, gradOutput)
 	-- self.gradInput = self.W:t() *gradOutput  
 	-- return self.gradInput
 
-	self.gradW = (gradOutput * input:t()) / self.batch_size
-	self.gradB = gradOutput:sum(2) / self.batch_size
+	self.gradW = (gradOutput * input:t())
+	self.gradB = gradOutput:sum(2)
 	self.gradInput = self.W:t() * gradOutput
 	return self.gradInput
 
