@@ -13,7 +13,7 @@ end
 
 function Model:forward(input)
 	-- returns the output of the last Layer contained in model
-	-- TODO Inputs should be always considered as batches. (num_input * batch_size)
+	-- Inputs should be always considered as batches. (num_input * batch_size)
 	local linput = input
 	for k=1, self.numLayers do
 		linput = self.Layers[k]:forward(linput)
@@ -35,6 +35,7 @@ function Model:backward(input, gradOutput)
 	if self.numLayers > 0 then
 		lgradOutput = self.Layers[1]:backward(linput, lgradOutput)
 	end
+	return lgradOutput
 end
 
 function Model:dispGradParam()

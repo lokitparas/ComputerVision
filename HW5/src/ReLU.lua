@@ -2,6 +2,11 @@ require 'torch'
 
 local ReLU = torch.class('ReLU')
 
+
+function ReLU:class()
+	return 'ReLU'
+end
+
 function ReLU:__init()
 	-- may be empty
 end
@@ -20,12 +25,6 @@ function ReLU:backward(input, gradOutput)
 	-- to this layer, updates the corresponding state variable gradInput and also returns it
 	-- x>0 : 1 else 0
 	-- input of size size_input * batch_size
-
-	-- self.gradInput = input
-	-- self.gradInput[torch.gt(self.gradInput, 0.0)] = 1.0
-	-- self.gradInput[torch.lt(self.gradInput, 0.0)] = 0.0
-	-- return self.gradInput
-
 
 	local lgradInput = input
 	lgradInput[torch.gt(lgradInput, 0.0)] = 1.0

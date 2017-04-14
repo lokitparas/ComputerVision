@@ -1,9 +1,20 @@
+-- th checkModel.lua -config ../sample/modelConfig_2.txt -i ../sample/input_sample_2.bin -ig ../sample/gradOutput_sample_2.bin -o ../sample_output/output_sample_2.bin -ow gradW_sample_2.bin -ob gradB_sample_2.bin -og gradInput_sample_2.bin
 require 'torch'
 require 'xlua'
 require("Linear");
 require("ReLU");
 require("Model");
 require("Criterion");
+require("train_and_test_loop");
+
+function layerFromString(line, batchsize)
+	if line == "relu" then
+		return ReLU.new()
+	else
+		local sz_in, sz_out = line:match("%w+ (%d+) (%d+)")
+		return Linear.new(sz_in, sz_out, batchsize)
+	end
+end
 
 
 local t={usage="Read problem statement for usage", version=""}
@@ -18,18 +29,64 @@ op:option{"-og", action='store', dest='og'}
 
 local options,args = op:parse()
 
-for k,v in pairs(options) do
-	print(k,v)
-end
+
+local input = torch.load(options['i'])
+input = torch.reshape(input, input:size(1), input:size(2)*input:size(3)*input:size(4)):t()
+local batchsize = input:size(2)
+local gradOutput = torch.load(options['ig']):t()
 
 model  = Model.new()
-local f = io.open(options['config'], 'r')
-lines = f:read "*a"
+local f = io.open(options['config'], 'rb')
+local num_layers = f:read "*n"
+local line = f:read "*line" -- To remove newline
 
+line = f:read "*line"
+while line and ((string.sub(line, 1, 6) == "linear") or (string.sub(line, 1, 4) == "relu")) do
+	model:addLayer(layerFromString(line, batchsize))
+	line = f:read "*line"
+end
+
+-- Loading weights
+local W = torch.load(line)
+
+-- Loading biases
+line = f:read "*line"
+local B = torch.load(line)
 local i = 1
-local line = lines[i].split()
+for k=1, model.numLayers do
+	if model.Layers[k]:class() == 'Linear' then
+		model.Layers[k].W = W[i]
+		model.Layers[k].B = B[i]
+	
+		i = i+1
+	end
+end
 
--- while 
+
+-- No normalization
+
+local op = model:forward(input)
+gradInput = model:backward(input, gradOutput)
+
+torch.save(options['o'], op:t())
+
+ow = {}
+for i=1,model.numLayers do
+	if model.Layers[i]:class() == 'Linear' then
+		table.insert(ow, model.Layers[i].gradW)
+	end
+end
+torch.save(options['ow'], ow)
+
+ob = {}
+for i=1,model.numLayers do
+	if model.Layers[i]:class() == 'Linear' then
+		table.insert(ob, model.Layers[i].gradB)
+	end
+end
+torch.save(options['ob'], ob)
+
+torch.save(options['og'], gradInput)
 
 -- The file modelConfig.txt has the following format:
 -- (No. layers)
@@ -38,6 +95,7 @@ local line = lines[i].split()
 -- .
 -- (Layer weights path) 
 -- (Layer bias path)
+--
 -- (Layer description) varies for the two mandatory layers as: 
 -- • Linear Layer: ‘linear’ (i/p nodes) (o/p nodes)
 -- • ReLU layer: ‘relu’

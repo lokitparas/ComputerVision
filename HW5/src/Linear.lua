@@ -2,12 +2,17 @@ require 'torch'
 
 local Linear = torch.class('Linear')
 
+function Linear:class()
+	return 'Linear'
+end
+
 function Linear:__init(size_input, size_output, batch_size)
 	-- appropriately initialize
+	self.size_output = size_output
 	self.batch_size = batch_size
 	self.output = torch.zeros(size_output, batch_size)
 	self.W = (torch.rand(size_output, size_input):double()-0.5) * 0.001
-	self.B = (torch.rand(size_output, 1):double()-0.5) * 0.001
+	self.B = (torch.rand(size_output):double()-0.5) * 0.001
 	self.gradW = torch.zeros(size_output, size_input)
 	self.gradB = torch.zeros(size_output, 1)
 	self.gradInput = torch.zeros(size_input, batch_size)
@@ -21,7 +26,7 @@ function Linear:forward(input)
 	else
 		rep_count = 1
 	end
-	self.output = self.B:repeatTensor(1, rep_count) + self.W * input
+	self.output = self.B:reshape(self.size_output, 1):repeatTensor(1, rep_count) + self.W * input
 	return self.output
 
 end
@@ -53,7 +58,12 @@ end
 
 
 function Linear:gradient_descent(lr)
-	local momentum_alpha = 0.3
+	self.W = self.W - lr * self.gradW
+    self.B = self.B - lr * self.gradB
+end
+
+function Linear:gradient_descent(lr)
+	local momentum_alpha = 0.8
 	if self.gradW_historical then 
 		self.gradW_historical = (1-momentum_alpha)*self.gradW + momentum_alpha*self.gradW_historical
 	else
