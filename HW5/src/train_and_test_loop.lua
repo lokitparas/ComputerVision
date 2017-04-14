@@ -13,7 +13,7 @@ function mod(a, b)
 end
 
 randomIdx = {}
-for i = 1,200 do
+for i = 1,100 do
     table.insert(randomIdx, math.random(10000))
 end
 
