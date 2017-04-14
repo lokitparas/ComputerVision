@@ -2,14 +2,11 @@ require 'torch'
 
 local Linear = torch.class('Linear')
 
-function Linear:class()
-	return 'Linear'
-end
-
 function Linear:__init(size_input, size_output, batch_size)
 	-- appropriately initialize
-	self.size_output = size_output
 	self.batch_size = batch_size
+	self.size_input = size_input
+	self.size_output = size_output
 	self.output = torch.zeros(size_output, batch_size)
 	self.W = (torch.rand(size_output, size_input):double()-0.5) * 0.001
 	self.B = (torch.rand(size_output):double()-0.5) * 0.001
@@ -56,14 +53,18 @@ function Linear:dispGradParam()
 	-- TODO
 end
 
-
-function Linear:gradient_descent(lr)
-	self.W = self.W - lr * self.gradW
-    self.B = self.B - lr * self.gradB
+function Linear:copy(model)
+	self.W:copy(model.W)
+	self.B:copy(model.B)
 end
 
+-- function Linear:gradient_descent(lr)
+-- 	self.W = self.W - lr * self.gradW
+--     self.B = self.B - lr * self.gradB
+-- end
+
 function Linear:gradient_descent(lr)
-	local momentum_alpha = 0.8
+	local momentum_alpha = 0.0
 	if self.gradW_historical then 
 		self.gradW_historical = (1-momentum_alpha)*self.gradW + momentum_alpha*self.gradW_historical
 	else
@@ -79,5 +80,10 @@ function Linear:gradient_descent(lr)
 
 	self.W = self.W - lr * self.gradW_historical
     self.B = self.B - lr * self.gradB_historical
+end
+
+
+function Linear:class()
+	return "Linear"
 end
     

@@ -1,4 +1,6 @@
 require 'torch'
+require("Linear");
+require("ReLU");
 
 local Model = torch.class('Model')
 
@@ -44,6 +46,26 @@ function Model:dispGradParam()
 	-- with space separated elements.
 	for k=self.numLayers,1,-1 do
 		self.Layers[k]:dispGradParam()
+	end
+end
+
+function Model:copy(model)
+	for k=1, self.numLayers do
+		self.Layers[k]:copy(model.Layers[k])
+	end
+end
+
+function Model:clone(model)
+	self.numLayers = model.numLayers
+	self.isTrain = model.isTrain
+	for k=1, self.numLayers do
+		if model.Layers[k]:class() == "Linear" then
+			self.Layers[k] = Linear.new(model.Layers[k].size_input, 
+				model.Layers[k].size_output, model.Layers[k].batch_size)
+			self.Layers[k]:copy(model.Layers[k])
+		elseif model.Layers[k]:class() == "ReLU" then
+			self.Layers[k] = ReLU.new()
+		end
 	end
 end
 

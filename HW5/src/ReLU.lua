@@ -2,11 +2,6 @@ require 'torch'
 
 local ReLU = torch.class('ReLU')
 
-
-function ReLU:class()
-	return 'ReLU'
-end
-
 function ReLU:__init()
 	-- may be empty
 end
@@ -47,6 +42,12 @@ function ReLU:dispGradParam()
 	-- TODO
 end
 
+function ReLU:copy(model)
+end
 
 function ReLU:gradient_descent(lr)
+end
+
+function ReLU:class()
+	return "ReLU"
 end
