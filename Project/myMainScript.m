@@ -1,7 +1,9 @@
 addpath('./MMread');
 
+num_bins = 16;
+
 path = '/Users/anand/Desktop/sem8/vision/assgn/Project';
-fileName = 'vid.mp4';
+fileName = 'anand.mp4';
 fileFullName = strcat(path, '/', fileName);
 
 [video, audio_orig] = mmread(fileFullName);
@@ -15,20 +17,33 @@ end
 imshow(vid(:,:,1));
 hold on;
 % First click on top left corner and 
-% [x, y] = getpts();
-hold off;
-drawEllipse(x(1), y(1), x(2), y(2));
+[x, y] = getpts();
 
+ax=[(x(2)-x(1))/2, (y(2)-y(1))/2]; 
+% horizontal radius vertical radius
+center=[round((x(2)+x(1))/2), round((y(2)+y(1))/2)]; 
+% c ellipse centre coordinates
+drawEllipse(ax, center);
+hold off;
+
+y0_points = pointsFromEllipse(ax, center, size(vid(:,:,1)));
+y0_bins = points2bins(y0_points, vid(:,:,1), num_bins);
+q = getModel(y0_points, y0_bins, num_bins, ax, center);
+
+mov = VideoWriter('anand_tracked.mp4','MPEG-4');
+mov.FrameRate = video.rate;
+open(mov)
+% for i = 2:video.nrFramesTotal
 for i = 2:video.nrFramesTotal
-    
-    [y0_vals, y0_locs] = pointsFromEllipse(x(1), y(1), x(2), y(2));
+    [ax, center] = meanShift(vid(:,:,i), ax, center, q, num_bins);
     
     imshow(vid(:,:,i));
     hold on;
-    drawEllipse(x(1), y(1), x(2), y(2));
+    drawEllipse(ax, center);
     hold off;
-    pause(0.1)
+    writeVideo(mov,getframe(gca));
+%     pause(0.1)
 end
+close(mov);
 
-
-writevideo('op.avi', vid, video.rate);
+% writevideo('op.avi', vid, video.rate);
