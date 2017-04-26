@@ -3,7 +3,7 @@ addpath('./MMread');
 num_bins = 16;
 
 path = '/Users/anand/Desktop/sem8/vision/assgn/Project';
-fileName = 'anand.mp4';
+fileName = 'messi1.m4v';
 fileFullName = strcat(path, '/', fileName);
 
 [video, audio_orig] = mmread(fileFullName);
@@ -30,7 +30,7 @@ y0_points = pointsFromEllipse(ax, center, size(vid(:,:,1)));
 y0_bins = points2bins(y0_points, vid(:,:,1), num_bins);
 q = getModel(y0_points, y0_bins, num_bins, ax, center);
 
-mov = VideoWriter('anand_tracked.mp4','MPEG-4');
+mov = VideoWriter('messi_tracked.mp4','MPEG-4');
 mov.FrameRate = video.rate;
 open(mov)
 % for i = 2:video.nrFramesTotal
