@@ -10,25 +10,38 @@ function BN:__init(size_input, size_output, batch_size)
 	self.beta = 0
 	self.gamma = 1
 	self.output = torch.zeros(size_output, batch_size)
+	self.gradGamma = 0
+	self.gradBeta = 0
+	self.mean_batch = torch.zeros(size_input, 1)
+	self.var_batch = torch.zeros(size_input, 1)
 end
 
 function BN:forward(input)
 	-- computes and returns the output of the layer and also saves it in the state variable output
 	-- input is size_input * batch_size
 	if isTrain then
-		local mean_batch = input:mean(2) 
-		local var_batch = input:var(2) + 1e-8
-		var_batch = torch.sqrt(var_batch)
+		self.mean_batch = input:mean(2) 
+		self.var_batch = input:var(2) + 1e-8
+		var_batch = torch.sqrt(self.var_batch)
 
 		if input:size():size() > 1 then
 			rep_count = input:size(2)
 		else
 			rep_count = 1
 		end
-		norm_input = (input - mean_batch:repeatTensor(1, rep_count)):cdiv(var_batch:repeatTensor(1, rep_count))
-		return self.output  --  todo : use gamma and beta
+		norm_input = (input - self.mean_batch:repeatTensor(1, rep_count)):cdiv(self.var_batch:repeatTensor(1, rep_count))
+
+		self.output = self.gamma*norm_input - self.beta
+
+		-- print(input)
+		-- print(self.output)
+		-- print(self.gamma)
+		-- print(self.beta)
+		return self.output
 	else
-		return input
+		-- return input
+		norm_input = (input - self.mean_batch:repeatTensor(1, rep_count)):cdiv(self.var_batch:repeatTensor(1, rep_count))
+		return self.gamma*norm_input - self.beta
 	end
 
 end
@@ -39,7 +52,7 @@ function BN:backward(input, gradOutput)
 	-- self.gradW = gradOutput * input:t()
 	-- self.gradB = gradOutput
 	-- self.gradInput = self.W:t() *gradOutput  
-	-- return self.gradInput	
+	-- return self.gradInpuT
 	
 	local gradNormInput = self.gamma * gradOutput
 	local mean_batch = input:mean(2) 
@@ -57,6 +70,9 @@ function BN:backward(input, gradOutput)
 
 	self.gradBeta = gradOutput:sum(1):sum(2)
 	self.gradGamma = (norm_input:cmul(gradOutput)):sum(1):sum(2)
+	-- print(self.gradGamma)
+	-- print(self.gradBeta)
+	-- print(gradOutput)
 
 
 	local answer = (1/N)*(var_batch:repeatTensor(1,rep_count))
