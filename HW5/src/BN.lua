@@ -4,6 +4,9 @@ local BN = torch.class('BN')
 
 function BN:__init(size_input, size_output, batch_size)
 	-- appropriately initialize
+	self.batch_size = batch_size
+	self.size_input = size_input
+	self.size_output = size_output
 	self.beta = 0
 	self.gamma = 1
 	self.output = torch.zeros(size_output, batch_size)
@@ -37,13 +40,11 @@ function BN:backward(input, gradOutput)
 	-- self.gradB = gradOutput
 	-- self.gradInput = self.W:t() *gradOutput  
 	-- return self.gradInput	
-	self.gradBeta = gradOutput:sum(1)
-	self.gradGamma = (gradOutput * self.norm_input):sum(1)
 	
 	local gradNormInput = self.gamma * gradOutput
 	local mean_batch = input:mean(2) 
 	local var_batch = input:var(2) + 1e-8
-	var_batch = 1/var_batch
+	var_batch = torch.pow(var_batch,-1)
 	local N = input:size(1)
 	var_batch = torch.sqrt(var_batch)
 
@@ -54,14 +55,36 @@ function BN:backward(input, gradOutput)
 	end
 	local norm_input = (input - mean_batch:repeatTensor(1, rep_count)):cdiv(var_batch:repeatTensor(1, rep_count))
 
+	self.gradBeta = gradOutput:sum(1):sum(2)
+	self.gradGamma = (norm_input:cmul(gradOutput)):sum(1):sum(2)
+
 
 	local answer = (1/N)*(var_batch:repeatTensor(1,rep_count))
-	answer = answer*(N*gradNormInput - gradNormInput:sum(1) - norm_input*(gradNormInput* norm_input):sum(1))
+	answer = answer:cmul(N*(gradNormInput) - (gradNormInput:sum(1)):repeatTensor(N,1) - norm_input:cmul(gradNormInput:cmul(norm_input:sum(1):repeatTensor(N,1))) )
 	return answer
 end
 
 function BN:dispGradParam()
 	-- TODO
+end
+
+function BN:gradient_descent(lr)
+	self.gamma = self.gamma - lr * self.gradGamma
+	self.gamma = self.gamma[1][1]
+    self.beta = self.beta - lr * self.gradBeta
+    self.beta = self.beta[1][1]
+end
+
+function BN:clearGradParam()
+	self.gradGamma:zero()
+	self.gradBeta:zero()
+	
+end
+
+
+function BN:copy(model)
+	self.gamma = model.gamma
+	self.beta = model.beta
 end
 
 

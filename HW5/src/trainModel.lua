@@ -6,7 +6,7 @@ require("BN")
 require("Criterion");
 
 
-local batchsize = 10
+local batchsize = 15
 local lr = 0.0001
 lambda = 0.1
 local epochs = 50000

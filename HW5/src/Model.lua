@@ -52,6 +52,10 @@ end
 
 function Model:copy(model)
 	for k=1, self.numLayers do
+		print(k)
+		print(model.Layers)
+		print(model.Layers[k])
+		print(self.Layers[k])
 		self.Layers[k]:copy(model.Layers[k])
 	end
 end
@@ -66,6 +70,9 @@ function Model:clone(model)
 			self.Layers[k]:copy(model.Layers[k])
 		elseif model.Layers[k]:class() == "ReLU" then
 			self.Layers[k] = ReLU.new()
+		elseif model.Layers[k]:class() == "BN" then
+			self.Layers[k] = BN.new(model.Layers[k].size_input, 
+				model.Layers[k].size_output, model.Layers[k].batch_size)
 		end
 	end
 end
