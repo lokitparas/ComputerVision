@@ -19,5 +19,5 @@ local target = torch.load(options['t'])
 -- print(input)
 -- print(target)
 
-print(Criterion:forward(input, target))
+print(Criterion:forward(input, target, 0))
 torch.save(options['og'], Criterion:backward(input, target))
