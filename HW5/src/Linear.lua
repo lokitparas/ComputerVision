@@ -58,30 +58,44 @@ function Linear:copy(model)
 	self.B:copy(model.B)
 end
 
--- function Linear:gradient_descent(lr)
--- 	self.W = self.W - lr * self.gradW
---     self.B = self.B - lr * self.gradB
--- end
-
 function Linear:gradient_descent(lr)
-	local momentum_alpha = 0.0
-	if self.gradW_historical then 
-		self.gradW_historical = (1-momentum_alpha)*self.gradW + momentum_alpha*self.gradW_historical
-	else
-		self.gradW_historical = self.gradW:clone()
-	end
-
-	if self.gradB_historical then 
-		self.gradB_historical = (1-momentum_alpha)*self.gradB + momentum_alpha*self.gradB_historical
-	else
-		self.gradB_historical = self.gradB:clone()
-	end
-
-
-	self.W = self.W - lr * self.gradW_historical
-    self.B = self.B - lr * self.gradB_historical
+    self.W = self.W - lr * self.gradW
+    self.B = self.B - lr * self.gradB
 end
 
+
+-- function Linear:gradient_descent(lr)
+--  -- adagrad
+-- 	if not self.GW then self.GW = torch.Tensor(self.size_output, self.size_input):fill(1e-8) end
+-- 	if not self.GB then self.GB = torch.Tensor(self.size_output):fill(1e-8) end
+-- 	self.GW = self.GW + self.gradW
+-- 	self.GB = self.GB + self.gradB
+	
+-- 	local Wupdate = torch.pow(self.GW,-0.5)
+-- 	Wupdate:cmul(self.gradW)
+-- 	local Bupdate = torch.pow(self.GB, -0.5)
+-- 	Bupdate:cmul(self.GB)
+-- 	self.W = self.W - lr * Wupdate
+--     self.B = self.B - lr * Bupdate
+-- end
+
+-- function Linear:gradient_descent(lr)
+-- -- with momentum
+-- 	local momentum_alpha = 0.0
+-- 	if self.gradW_historical then 
+-- 		self.gradW_historical = (1-momentum_alpha)*self.gradW + momentum_alpha*self.gradW_historical
+-- 	else
+-- 		self.gradW_historical = self.gradW:clone()
+-- 	end
+
+-- 	if self.gradB_historical then 
+-- 		self.gradB_historical = (1-momentum_alpha)*self.gradB + momentum_alpha*self.gradB_historical
+-- 	else
+-- 		self.gradB_historical = self.gradB:clone()
+-- 	end
+-- 	self.W = self.W - lr * self.gradW_historical
+--     self.B = self.B - lr * self.gradB_historical
+-- end
 
 function Linear:class()
 	return "Linear"

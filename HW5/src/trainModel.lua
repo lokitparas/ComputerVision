@@ -6,10 +6,10 @@ require("BN")
 require("Criterion");
 
 
-local batchsize = 15
-local lr = 0.0001
-lambda = 0.1
-local epochs = 50000
+local batchsize = 10
+local lr = 0.00001
+local lambda = 0.0
+local epochs = 20000
 
 local t={usage="-modelName (model name) -data /path/to/train.bin -target labels", version=""}
 local op = xlua.OptionParser(t)

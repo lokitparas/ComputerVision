@@ -31,8 +31,7 @@ ts_x = torch.reshape(ts_x, ts_x:size(1), ts_x:size(2)*ts_x:size(3)*ts_x:size(4))
 
 ts_x = norm(ts_x, model.x_mean, model.x_std)
 
-
-local fp = io.open("./bestModel_2/submission.csv", "w")
+local fp = io.open(options['modelName'].."/submission.csv", "w")
 fp:write("id,label\n")
 
 ts_y = torch.zeros(ts_x:size(1))
@@ -41,9 +40,7 @@ for i=1,ts_x:size(1) do
     _, op_label = torch.max(op, 1)
 	ts_y[i] = op_label[1][1]
 	fp:write(string.format("%d,%d\n", i, ts_y[i]))
-
 end
+fp:close()
 
 torch.save("testPrediction.bin", ts_y)
-
-fp:close()
