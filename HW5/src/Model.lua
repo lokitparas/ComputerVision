@@ -1,6 +1,7 @@
 require 'torch'
 require("Linear");
 require("ReLU");
+require("BN")
 
 local Model = torch.class('Model')
 
@@ -46,6 +47,7 @@ function Model:dispGradParam()
 	-- closer to output displayed first. The output format is a 2D matrix for each Layer
 	-- with space separated elements.
 	for k=self.numLayers,1,-1 do
+		print("Layer "..k)
 		self.Layers[k]:dispGradParam()
 	end
 end
@@ -71,8 +73,8 @@ function Model:clone(model)
 		elseif model.Layers[k]:class() == "ReLU" then
 			self.Layers[k] = ReLU.new()
 		elseif model.Layers[k]:class() == "BN" then
-			self.Layers[k] = BN.new(model.Layers[k].size_input, 
-				model.Layers[k].size_output, model.Layers[k].batch_size)
+			self.Layers[k] = BN.new()
+			self.Layers[k]:copy(model.Layers[k])
 		end
 	end
 end

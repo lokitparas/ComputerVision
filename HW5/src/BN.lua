@@ -81,7 +81,9 @@ function BN:backward(input, gradOutput)
 end
 
 function BN:dispGradParam()
-	-- TODO
+	print("Batch Normalize")
+	print("gamma ".. gamma)
+	print("beta "..beta)
 end
 
 function BN:gradient_descent(lr)

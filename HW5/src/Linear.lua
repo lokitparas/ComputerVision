@@ -36,8 +36,14 @@ function Linear:backward(input, gradOutput)
 	-- self.gradInput = self.W:t() *gradOutput  
 	-- return self.gradInput
 
-	self.gradW = (gradOutput * input:t())
-	self.gradB = gradOutput:sum(2)
+	if input:size():size() > 1 then
+		rep_count = input:size(2)
+	else
+		rep_count = 1
+	end
+
+	self.gradW = (gradOutput * input:t()) / rep_count
+	self.gradB = gradOutput:sum(2) /rep_count
 	self.gradInput = self.W:t() * gradOutput
 	return self.gradInput
 
@@ -50,7 +56,11 @@ function Linear:clearGradParam()
 end
 
 function Linear:dispGradParam()
-	-- TODO
+	print("Linear")
+	print("W ")
+	print(self.W)
+	print("B ")
+	print(self.B)
 end
 
 function Linear:copy(model)
@@ -63,6 +73,10 @@ function Linear:gradient_descent(lr)
     self.B = self.B - lr * self.gradB
 end
 
+function Linear:class()
+	return "Linear"
+end
+    
 
 -- function Linear:gradient_descent(lr)
 --  -- adagrad
@@ -96,8 +110,3 @@ end
 -- 	self.W = self.W - lr * self.gradW_historical
 --     self.B = self.B - lr * self.gradB_historical
 -- end
-
-function Linear:class()
-	return "Linear"
-end
-    

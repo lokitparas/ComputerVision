@@ -39,7 +39,7 @@ function ReLU:clearGradParam()
 end
 
 function ReLU:dispGradParam()
-	-- TODO
+	print("ReLU")
 end
 
 function ReLU:copy(model)

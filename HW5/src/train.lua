@@ -6,7 +6,6 @@ local besterr = 1e10
 function norm(data_x, mean, std)
 	new_data_x=torch.zeros(data_x:size(1), data_x:size(2))
 	for i=1,data_x:size(1) do
-        -- data_x[i] = image.rgb2yuv(data_x[i])
 		xi = (data_x[i]:double() - mean)
     	xi = xi:cdiv(std)
     	xi = xi:reshape(3*32*32)
