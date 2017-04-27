@@ -40,6 +40,7 @@ end
 
 function train(epochs, lr, lambda, batchsize)
 	for i = 0, epochs do
+        model.isTrain = true
         -- shuffle data
         if mod(i, tr_x:size(1)) == 0 then
             shuffle = torch.randperm(tr_x:size(1))
@@ -75,6 +76,7 @@ function train(epochs, lr, lambda, batchsize)
         -- udapte model weights
         model:gradient_descent(lr)
         model:clearGradParam()
+        model.isTrain = false
 
         if mod(i, 100) == 0 then
             err = evaluate(model, te_x, te_y)
