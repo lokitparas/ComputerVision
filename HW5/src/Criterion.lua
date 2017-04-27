@@ -11,9 +11,15 @@ function Criterion:forward(input, target)
 	local soft = torch.exp(input)
 	local norm = torch.sum(soft, 2)
 	local batchsize = input:size(1)
+
+	local w1 = layer1.W:clone()
+    local lossL2 = w1:cmul(w1):sum()
+    -- local w2 = layer2.W:clone()
+    -- lossL2 = lossL2 + w2:cmul(w2):sum()
+
 	local llog = 0.0
 	for i=1,batchsize do
-		llog = -torch.log(soft[i][tgt[i][1]] / norm[i][1])
+		llog = -torch.log(soft[i][tgt[i][1]] / norm[i][1])  + lambda * lossL2
 		loss = loss + llog
 	end
 	loss = loss / batchsize

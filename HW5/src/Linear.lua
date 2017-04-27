@@ -8,8 +8,8 @@ function Linear:__init(size_input, size_output, batch_size)
 	self.size_input = size_input
 	self.size_output = size_output
 	self.output = torch.zeros(size_output, batch_size)
-	self.W = (torch.rand(size_output, size_input):double()-0.5) * 0.001
-	self.B = (torch.rand(size_output):double()-0.5) * 0.001
+	self.W = (torch.rand(size_output, size_input):double()-0.5) * 0.05
+	self.B = (torch.rand(size_output):double()-0.5) * 0.05
 	self.gradW = torch.zeros(size_output, size_input)
 	self.gradB = torch.zeros(size_output, 1)
 	self.gradInput = torch.zeros(size_input, batch_size)

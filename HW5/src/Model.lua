@@ -16,6 +16,7 @@ end
 function Model:forward(input)
 	-- returns the output of the last Layer contained in model
 	-- Inputs should be always considered as batches. (num_input * batch_size)
+	isTrain = self.isTrain
 	local linput = input
 	for k=1, self.numLayers do
 		linput = self.Layers[k]:forward(linput)

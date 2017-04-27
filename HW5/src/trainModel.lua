@@ -2,13 +2,14 @@ require 'torch'
 require 'xlua'
 require("train")
 require("Model");
+require("BN")
 require("Criterion");
 
 
 local batchsize = 10
-local lr = 0.00001
-local lambda = 0.0
-local epochs = 10000
+local lr = 0.0001
+lambda = 0.1
+local epochs = 50000
 
 local t={usage="-modelName (model name) -data /path/to/train.bin -target labels", version=""}
 local op = xlua.OptionParser(t)
@@ -28,6 +29,10 @@ tr_x = torch.load(options['data'])
 -- load training labels 
 tr_y = torch.load(options['target']):double() + 1
 
+-- for i=1,tr_x:size(1) do
+--     tr_x[i] = image.rgb2yuv(tr_x[i])
+-- end
+
 tr_x = torch.reshape(tr_x, tr_x:size(1), tr_x:size(2)*tr_x:size(3)*tr_x:size(4))
 
 -- For cross validation
@@ -39,9 +44,11 @@ tr_y = tr_y:sub(1, 40000)
 -- TODO
 model = Model.new()
 layer1 = Linear.new(3*32*32, 10, batchsize)
-layer2 = ReLU.new()
+layer2 = BN.new(10,10, batchsize)
+layer3 = ReLU.new()
 model:addLayer(layer1)
 model:addLayer(layer2)
+model:addLayer(layer3)
 criterion = Criterion.new()
 -- 
 
@@ -56,10 +63,13 @@ bestmodel:clone(model)
 bestmodel.x_mean = model.x_mean
 bestmodel.x_std = model.x_std
 
+
 os.execute("mkdir -p " .. options['modelName'])
 torch.save(options['modelName'].."/model.bin", model)
 
+model.isTrain = true
 train(epochs, lr, lambda, batchsize)
+model.isTrain = false
 
-os.execute("mkdir -p bestModel")
-torch.save("bestModel/model.bin", bestmodel)
+os.execute("mkdir -p bestModel_2")
+torch.save("bestModel_2/model.bin", bestmodel)
