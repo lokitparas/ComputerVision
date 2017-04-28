@@ -8,7 +8,7 @@ function w =  getWeights(y0_bins, q, p, num_bins, points, center, ax)
 	scaled_dist = (bsxfun(@minus,points,center).^2);
 	scaled_dist = bsxfun(@rdivide, scaled_dist, (ax.^2));
 	scaled_dist = sum(scaled_dist, 2);
-	w.*kernel_derivative(scaled_dist);
+	w= w.*kernel_derivative(scaled_dist);
 end
 
 function val = kernel_derivative(x)
