@@ -1,9 +1,9 @@
 -- th checkModel.lua -config ../sample/modelConfig_2.txt -i ../sample/input_sample_2.bin -ig ../sample/gradOutput_sample_2.bin -o ../sample_output/output_sample_2.bin -ow gradW_sample_2.bin -ob gradB_sample_2.bin -og gradInput_sample_2.bin
 require 'torch'
 require 'xlua'
-require("Linear");
-require("ReLU");
-require("Model");
+require("src/Linear");
+require("src/ReLU");
+require("src/Model");
 
 
 function layerFromString(line, batchsize)

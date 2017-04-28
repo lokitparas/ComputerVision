@@ -1,7 +1,7 @@
 require 'torch'
-require("Linear");
-require("ReLU");
-require("BN")
+require("./Linear");
+require("./ReLU");
+require("./BN")
 
 local Model = torch.class('Model')
 
@@ -43,7 +43,7 @@ function Model:backward(input, gradOutput)
 end
 
 function Model:dispGradParam()
-	-- sequentially print the parameters of the network with the Layer
+	-- TODO sequentially print the parameters of the network with the Layer
 	-- closer to output displayed first. The output format is a 2D matrix for each Layer
 	-- with space separated elements.
 	for k=self.numLayers,1,-1 do

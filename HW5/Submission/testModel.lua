@@ -1,6 +1,6 @@
 require 'torch'
 require 'xlua'
-require("Model");
+require("src/Model");
 
 function norm(data_x, mean, std)
 	new_data_x=torch.zeros(data_x:size(1), data_x:size(2))

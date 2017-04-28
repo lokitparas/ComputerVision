@@ -1,15 +1,14 @@
 require 'torch'
 require 'xlua'
-require("train")
-require("Model");
-require("BN")
-require("Criterion");
+require("src/train")
+require("src/Model");
+require("src/Criterion");
 
 
 local batchsize = 10
 local lr = 0.0001
-local lambda = 0.0
-local epochs = 500000
+local lambda = 0.1
+local epochs = 100000
 
 local t={usage="-modelName (model name) -data /path/to/train.bin -target labels", version=""}
 local op = xlua.OptionParser(t)
@@ -22,7 +21,7 @@ local options,args = op:parse()
 -- load training images
 tr_x = torch.load(options['data'])
 -- load training labels 
-tr_y = torch.load(options['target']):double() + 1
+tr_y = torch.load(options['target']):double()
 
 
 tr_x = torch.reshape(tr_x, tr_x:size(1), tr_x:size(2)*tr_x:size(3)*tr_x:size(4))
